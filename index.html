@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PK INTERNATIONAL - Login</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-box">
+            <h2>Welcome to PK INTERNATIONAL</h2>
+            <p style="text-align:center; margin-bottom:20px; color:#666;">Please login to continue</p>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="auth-btn">Login</button>
+            </form>
+            
+            <div style="text-align:center; margin:20px 0;">
+                <div style="height:1px; background:#ddd; margin:20px 0;"></div>
+                <p>Don't have an account?</p>
+                <a href="customer-signup.html" class="auth-btn" style="background:#27ae60; display:block; text-align:center; text-decoration:none;">
+                    Create New Account
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+    <script src="firebase-auth.js"></script>
+    <script>
+        // Check if user already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = localStorage.getItem('currentUser');
+            if (user) {
+                window.location.href = 'store.html';
+            }
+        });
+
+        // Login form handler
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            const btn = e.target.querySelector('button');
+            btn.textContent = 'Logging in...';
+            btn.disabled = true;
+            
+            try {
+                await signIn(email, password);
+                window.location.href = 'store.html';
+            } catch (error) {
+                alert('Login failed: ' + error.message);
+                btn.textContent = 'Login';
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

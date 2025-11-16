@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - PK INTERNATIONAL</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>PK INTERNATIONAL</h2>
+            </div>
+            <div class="nav-icons">
+                <a href="index.html" class="nav-icon">Home</a>
+                <a href="cart.html" class="nav-icon">Cart</a>
+                <a href="customer-login.html" class="nav-icon" id="loginLink">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="cart-container">
+        <h1>Checkout</h1>
+        
+        <div class="checkout-steps">
+            <div class="step active">1. Shipping Information</div>
+            <div class="step">2. Payment Method</div>
+            <div class="step">3. Order Review</div>
+        </div>
+
+        <form id="checkoutForm">
+            <div class="form-section">
+                <h3>Shipping Address</h3>
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <input type="text" id="address" required>
+                </div>
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <input type="text" id="city" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" required>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Payment Method</h3>
+                <div class="payment-options">
+                    <label class="payment-option">
+                        <input type="radio" name="paymentMethod" value="jazzcash" required>
+                        <span>JazzCash</span>
+                    </label>
+                    <label class="payment-option">
+                        <input type="radio" name="paymentMethod" value="easypaisa">
+                        <span>EasyPaisa</span>
+                    </label>
+                    <label class="payment-option">
+                        <input type="radio" name="paymentMethod" value="cod">
+                        <span>Cash on Delivery</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Order Summary</h3>
+                <div id="orderSummary">
+                    <!-- Order summary will be loaded here -->
+                </div>
+                <div class="order-total">
+                    <strong>Total: Rs. <span id="orderTotal">0</span></strong>
+                </div>
+            </div>
+
+            <button type="submit" class="checkout-btn">Place Order</button>
+        </form>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+    <script src="firebase-auth.js"></script>
+    <script>
+        // Load order summary
+        function loadOrderSummary() {
+            const orderSummary = document.getElementById('orderSummary');
+            const orderTotal = document.getElementById('orderTotal');
+            
+            if (cart.length === 0) {
+                orderSummary.innerHTML = '<p>Your cart is empty</p>';
+                orderTotal.textContent = '0';
+                return;
+            }
+            
+            let summaryHTML = '';
+            let total = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                summaryHTML += `
+                    <div class="order-item">
+                        <span>${item.name} (x${item.quantity})</span>
+                        <span>Rs. ${itemTotal.toLocaleString()}</span>
+                    </div>
+                `;
+            });
+            
+            orderSummary.innerHTML = summaryHTML;
+            orderTotal.textContent = total.toLocaleString();
+        }
+        
+        // Handle checkout form submission
+        document.getElementById('checkoutForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!currentUser) {
+                showNotification('Please login to place order', 'error');
+                return;
+            }
+            
+            if (cart.length === 0) {
+                showNotification('Your cart is empty', 'error');
+                return;
+            }
+            
+            const formData = {
+                shippingAddress: {
+                    fullName: document.getElementById('fullName').value,
+                    address: document.getElementById('address').value,
+                    city: document.getElementById('city').value,
+                    phone: document.getElementById('phone').value
+                },
+                paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').value
+            };
+            
+            try {
+                const orderId = await processOrder(formData);
+                showNotification('Order placed successfully!', 'success');
+                
+                setTimeout(() => {
+                    window.location.href = `order-confirmation.html?id=${orderId}`;
+                }, 1500);
+                
+            } catch (error) {
+                showNotification('Order failed: ' + error.message, 'error');
+            }
+        });
+        
+        // Initialize checkout page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadOrderSummary();
+            
+            if (cart.length === 0) {
+                showNotification('Your cart is empty', 'error');
+                setTimeout(() => {
+                    window.location.href = 'products.html';
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>

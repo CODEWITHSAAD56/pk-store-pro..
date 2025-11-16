@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - PK INTERNATIONAL</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-box">
+            <h2>Create Account</h2>
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="signupName">Full Name</label>
+                    <input type="text" id="signupName" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" required onblur="checkEmailExists()">
+                    <small id="emailError" style="color:red; display:none;">Email already registered</small>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" required onkeyup="checkPasswordStrength()">
+                    <small id="passwordStrength" style="color:#666;">Password must be at least 6 characters with letters and numbers</small>
+                </div>
+                <button type="submit" class="auth-btn" id="signupBtn">Sign Up</button>
+                <div class="auth-link">
+                    <p>Already have an account? <a href="index.html">Login here</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+    <script src="firebase-auth.js"></script>
+    <script>
+        let emailExists = false;
+        let passwordStrong = false;
+
+        // Check if email already exists
+        async function checkEmailExists() {
+            const email = document.getElementById('signupEmail').value;
+            const errorElement = document.getElementById('emailError');
+            
+            if (!email) return;
+            
+            try {
+                const snapshot = await db.ref('users').orderByChild('email').equalTo(email).once('value');
+                if (snapshot.exists()) {
+                    emailExists = true;
+                    errorElement.style.display = 'block';
+                    document.getElementById('signupBtn').disabled = true;
+                } else {
+                    emailExists = false;
+                    errorElement.style.display = 'none';
+                    updateSignupButton();
+                }
+            } catch (error) {
+                console.error('Error checking email:', error);
+            }
+        }
+
+        // Check password strength
+        function checkPasswordStrength() {
+            const password = document.getElementById('signupPassword').value;
+            const strengthElement = document.getElementById('passwordStrength');
+            
+            if (password.length >= 6 && /[a-zA-Z]/.test(password) && /[0-9]/.test(password)) {
+                passwordStrong = true;
+                strengthElement.style.color = 'green';
+                strengthElement.textContent = '✓ Strong password';
+            } else {
+                passwordStrong = false;
+                strengthElement.style.color = 'red';
+                strengthElement.textContent = 'Password must be at least 6 characters with letters and numbers';
+            }
+            updateSignupButton();
+        }
+
+        // Update signup button state
+        function updateSignupButton() {
+            const btn = document.getElementById('signupBtn');
+            btn.disabled = emailExists || !passwordStrong;
+        }
+
+        // Signup form handler
+        document.getElementById('signupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (emailExists || !passwordStrong) {
+                alert('Please fix the errors before submitting');
+                return;
+            }
+            
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            
+            const btn = document.getElementById('signupBtn');
+            btn.textContent = 'Creating Account...';
+            btn.disabled = true;
+            
+            try {
+                await signUp(email, password, { name: name });
+                // Auto redirect without alert
+                window.location.href = 'store.html';
+            } catch (error) {
+                alert('Sign up failed: ' + error.message);
+                btn.textContent = 'Sign Up';
+                btn.disabled = false;
+            }
+        });
+
+        // Check if user already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = localStorage.getItem('currentUser');
+            if (user) {
+                window.location.href = 'store.html';
+            }
+        });
+    </script>
+</body>
+</html>

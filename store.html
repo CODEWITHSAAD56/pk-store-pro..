@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PK INTERNATIONAL - Store</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <!-- FontAwesome for Professional Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>PK INTERNATIONAL</h2>
+            </div>
+            
+            <div class="nav-search">
+                <input type="text" placeholder="Search products..." id="searchInput">
+                <button>Search</button>
+            </div>
+            
+            <div class="nav-icons">
+                <span>Welcome, <span id="userName">User</span></span>
+                <a href="cart.html" class="nav-icon cart-icon"><span id="cartCount">0</span></a>
+                <a href="#" class="nav-icon" onclick="signOut()">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Rest of your store.html content remains same -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Welcome to PK INTERNATIONAL</h1>
+            <p>Best quality products at affordable prices</p>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="categories">
+        <h2>Shop by Category</h2>
+        <div class="categories-grid">
+            <div class="category-card" onclick="filterByCategory('electronics')">
+                <h3>Electronics</h3>
+                <p>Mobile, Laptop, Accessories</p>
+            </div>
+            <div class="category-card" onclick="filterByCategory('clothing')">
+                <h3>Clothing</h3>
+                <p>Men, Women, Kids Fashion</p>
+            </div>
+            <div class="category-card" onclick="filterByCategory('home')">
+                <h3>Home & Living</h3>
+                <p>Furniture, Decor, Kitchen</p>
+            </div>
+            <div class="category-card" onclick="filterByCategory('beauty')">
+                <h3>Beauty</h3>
+                <p>Cosmetics, Skincare, Perfumes</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products-section">
+        <h2>Featured Products</h2>
+        <div class="products-grid" id="productsGrid">
+            <div class="loading">Loading products...</div>
+        </div>
+    </section>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+    <script src="firebase-auth.js"></script>
+    <!-- Products Section ke baad Footer add karein -->
+</section>
+
+<!-- Category Products Section (Hidden by default) -->
+<section class="category-products-section" id="categoryProducts" style="display: none;">
+    <div class="section-header">
+        <h2 id="categoryTitle">Category Products</h2>
+        <button class="back-btn" onclick="showFeaturedProducts()">
+            <i class="fas fa-arrow-left"></i> Back to All Products
+        </button>
+    </div>
+    <div class="products-grid" id="categoryProductsGrid">
+        <!-- Category products will be loaded here -->
+    </div>
+</section>
+
+<!-- Footer Section - YAHAN ADD KAREIN -->
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <h3><i class="fas fa-store"></i> PK INTERNATIONAL</h3>
+            <p>Your trusted online shopping destination for quality products at best prices.</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-whatsapp"></i></a>
+            </div>
+        </div>
+        
+        <div class="footer-section">
+            <h4>Quick Links</h4>
+            <a href="store.html"><i class="fas fa-home"></i> Home</a>
+            <a href="#"><i class="fas fa-box"></i> Products</a>
+            <a href="#"><i class="fas fa-percent"></i> Special Offers</a>
+            <a href="#"><i class="fas fa-truck"></i> Track Order</a>
+        </div>
+        
+        <div class="footer-section">
+            <h4>Customer Support</h4>
+            <a href="#"><i class="fas fa-phone"></i> +92 300 1234567</a>
+            <a href="#"><i class="fas fa-envelope"></i> support@pkinternational.com</a>
+            <a href="#"><i class="fas fa-comments"></i> Live Chat</a>
+            <a href="#"><i class="fas fa-question-circle"></i> Help Center</a>
+        </div>
+        
+        <div class="footer-section">
+            <h4>Company</h4>
+            <a href="#"><i class="fas fa-info-circle"></i> About Us</a>
+            <a href="#"><i class="fas fa-shield-alt"></i> Privacy Policy</a>
+            <a href="#"><i class="fas fa-file-contract"></i> Terms & Conditions</a>
+            <a href="#"><i class="fas fa-exchange-alt"></i> Return Policy</a>
+        </div>
+    </div>
+    
+    <div class="footer-bottom">
+        <div class="payment-methods">
+            <span>We Accept:</span>
+            <i class="fab fa-cc-visa"></i>
+            <i class="fab fa-cc-mastercard"></i>
+            <i class="fas fa-mobile-alt"></i>
+            <i class="fas fa-wallet"></i>
+        </div>
+        <p>&copy; 2024 PK INTERNATIONAL. All rights reserved. | Designed with <i class="fas fa-heart" style="color: #e74c3c;"></i> for our customers</p>
+    </div>
+</footer>
+</body>
+</html>

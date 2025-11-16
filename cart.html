@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - PK INTERNATIONAL</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <!-- FontAwesome for Real Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2><i class="fas fa-store"></i> PK INTERNATIONAL</h2>
+            </div>
+            <div class="nav-icons">
+                <a href="store.html" class="nav-icon"><i class="fas fa-home"></i> Continue Shopping</a>
+                <a href="cart.html" class="nav-icon cart-icon"><span id="cartCount">0</span></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="cart-container">
+        <h1><i class="fas fa-shopping-cart"></i> Shopping Cart</h1>
+        
+        <div class="cart-content">
+            <!-- Left Column - Cart Items -->
+            <div class="cart-items-section">
+                <h3><i class="fas fa-boxes"></i> Your Items</h3>
+                <div id="cartItems">
+                    <!-- Cart items will be loaded here -->
+                </div>
+            </div>
+            
+            <!-- Right Column - Order Summary -->
+            <div class="order-summary-section">
+                <h3><i class="fas fa-receipt"></i> Order Summary</h3>
+                
+                <div class="summary-item">
+                    <span>Subtotal:</span>
+                    <span>Rs. <span id="subtotal">0</span></span>
+                </div>
+                <div class="summary-item">
+                    <span>Shipping:</span>
+                    <span>Rs. <span id="shipping">200</span></span>
+                </div>
+                <div class="summary-item">
+                    <span>Tax (5%):</span>
+                    <span>Rs. <span id="tax">0</span></span>
+                </div>
+                <div class="summary-item total">
+                    <span>Total Amount:</span>
+                    <span>Rs. <span id="cartTotal">0</span></span>
+                </div>
+                
+                <!-- Delivery Address -->
+                <div class="address-section">
+                    <h4><i class="fas fa-map-marker-alt"></i> Delivery Address</h4>
+                    <div class="form-group">
+                        <input type="text" id="fullName" placeholder="Full Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" id="phone" placeholder="Phone Number" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="address" placeholder="Complete Delivery Address (House#, Street, Area, Landmark)" required rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="city" placeholder="City" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="postalCode" placeholder="Postal Code" required>
+                    </div>
+                </div>
+                
+                <!-- Payment Methods -->
+                <div class="payment-section">
+                    <h4><i class="fas fa-credit-card"></i> Payment Method</h4>
+                    <div class="payment-options">
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="jazzcash" required>
+                            <span><i class="fas fa-mobile-alt"></i> JazzCash</span>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="easypaisa">
+                            <span><i class="fas fa-wallet"></i> EasyPaisa</span>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="cod">
+                            <span><i class="fas fa-money-bill-wave"></i> Cash on Delivery</span>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="card">
+                            <span><i class="fas fa-credit-card"></i> Credit/Debit Card</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Complete Order Button -->
+                <button class="complete-order-btn" onclick="proceedToCheckout()">
+                    <i class="fas fa-lock"></i> 
+                    <span class="btn-text">Complete Order Securely</span>
+                    <span class="btn-arrow">→</span>
+                </button>
+                
+                <div class="security-notice">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Your payment information is secure and encrypted</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+    <script src="firebase-auth.js"></script>
+    <script>
+        <!-- Delivery Address - COMPLETELY FIXED -->
+<div class="address-section">
+    <h4><i class="fas fa-map-marker-alt"></i> Delivery Address</h4>
+    <div class="form-group">
+        <input type="text" id="fullName" placeholder="Full Name" required style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px;">
+    </div>
+    <div class="form-group">
+        <input type="tel" id="phone" placeholder="Phone Number" required style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px;">
+    </div>
+    <div class="form-group">
+        <textarea id="address" placeholder="Complete Delivery Address (House#, Street, Area, Landmark)" required rows="3" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; resize: vertical;"></textarea>
+    </div>
+    <div class="form-group">
+        <input type="text" id="city" placeholder="City" required style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px;">
+    </div>
+    <div class="form-group">
+        <input type="text" id="postalCode" placeholder="Postal Code" required style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px;">
+    </div>
+</div>
+    </script>
+</body>
+</html>
